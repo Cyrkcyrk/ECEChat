@@ -1,6 +1,7 @@
 
 const supertest = require('supertest')
 const app = require('../lib/app')
+const db = require('../lib/db')
 
 describe('messages', () => {
   
@@ -8,30 +9,20 @@ describe('messages', () => {
     await db.admin.clear()
   })
   
-  it.skip('list empty', async () => {
-    // Create a channel
-    await supertest(app)
-    .post('/channel')
-    .send({name: 'channel 1'})
-    // Get messages
+  it('list empty', async () => {
     const {body: messages} = await supertest(app)
-    .get('/channel/1/messages')
+    .get('/messages')
     .expect(200)
     messages.should.match([])
   })
   
-  it.skip('list one message', async () => {
-    // Create a channel
+  it('list one message', async () => {
     await supertest(app)
-    .post('/channel')
-    .send({name: 'channel 1'})
-    // and a message inside it
-    await supertest(app)
-    .post('/channel/1/messages')
+    .post('/message')
     .send({content: 'Hello ECE'})
     // Get messages
     const {body: messages} = await supertest(app)
-    .get('/channel/1/messages')
+    .get('/messages')
     .expect(200)
     messages.should.match([{
       id: /^\w+-\w+-\w+-\w+-\w+$/,
@@ -39,14 +30,15 @@ describe('messages', () => {
     }])
   })
   
-  it.skip('add one element', async () => {
-    // Create a channel
+  it('add one element', async () => {
+	await db.admin.clear()
+    // Create a message
     await supertest(app)
-    .post('/channel')
-    .send({name: 'channel 1'})
+    .post('/message')
+    .send({content: 'message 1'})
     // Create a message inside it
     const {body: message} = await supertest(app)
-    .post('/channel/1/messages')
+    .post('/message')
     .send({content: 'Hello ECE'})
     .expect(201)
     message.should.match({
@@ -55,8 +47,8 @@ describe('messages', () => {
     })
     // Check it was correctly inserted
     const {body: messages} = await supertest(app)
-    .get('/channel/1/messages')
-    messages.length.should.eql(1)
+    .get('/messages')
+    messages.length.should.eql(2)
   })
   
 })
