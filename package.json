@@ -33,6 +33,8 @@
     "recursive": true
   },
   "scripts": {
-    "test": "mocha 'test/**/*.js'"
+    "test": "mocha 'test/**/*.js'",
+    "test-chan": "mocha 'test/channels.js'",
+	"start": "node lib/index.js"
   }
 }
