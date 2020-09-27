@@ -1,0 +1,43 @@
+const db = require('./db')
+
+module.exports = (app) => {
+	app.get('/channels', async (req, res) => {
+		const channels = await db.channels.list()
+		res.json(channels)
+	})
+
+	app.post('/channel', async (req, res) => {
+		try {
+			const channel = await db.channels.create(req.body);
+			res.status(201).json(channel);
+		} catch (e) {
+			console.error(e);
+			res.status(403)
+		}
+	})
+
+	app.get('/channel/:id', async (req, res) => {
+		const channel = await db.channels.get(req.params.id);
+		console.log(channel);
+		res.json(channel)
+	})
+
+	app.put('/channel/:id', (req, res) => {
+		try {
+			const channel = db.channels.update(req.params.id, req.body)
+			res.json(channel)
+		} catch (e) {
+			console.error(e);
+			res.status(403)
+		}
+	})
+	app.delete('/channel/:id', (req, res) => {
+		try {
+			const channel = db.channels.delete(req.params.id)
+			res.json(channel)
+		} catch (e) {
+			console.error(e);
+			res.status(403)
+		}
+	})
+}

@@ -34,7 +34,8 @@
   },
   "scripts": {
     "test": "mocha 'test/**/*.js'",
-    "test-chan": "mocha 'test/channels.js'",
-	"start": "node lib/index.js"
+    "test_synch": "mocha 'test_synch/**/*.js'",
+    "start": "node lib/index.js"
+    "start_synch": "node lib_synch/index.js"
   }
 }
