@@ -1,0 +1,7 @@
+.*
+*lock*
+/db
+/node_modules
+!.gitignore
+/courses
+/db
