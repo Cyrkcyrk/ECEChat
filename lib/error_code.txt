@@ -1,0 +1,5 @@
+1 : missingUsername		400
+2 : missingPassword		400
+3 : conflictUsername		409
+4 : badPassword			401
+5 : unknownUser			404
