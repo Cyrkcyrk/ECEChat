@@ -1,5 +1,13 @@
-1 : missingUsername		400
-2 : missingPassword		400
+101 : missingUsername		400
+102 : missingPassword		400
+103 : missingChannelName	400
+104 : missinChannelOwner	400
+
+201 : unknownUser		404
+202 : unknownChannel		404
+
 3 : conflictUsername		409
 4 : badPassword			401
-5 : unknownUser			404
+6 : missingPermission		401
+7 : missingToken		400
+8
