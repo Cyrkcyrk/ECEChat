@@ -10,4 +10,6 @@
 4 : badPassword			401
 6 : missingPermission		401
 7 : missingToken		400
-8
+
+8 : memberAlreadyExist		409
+9 : adminAlreadyExist		409

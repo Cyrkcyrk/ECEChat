@@ -4,7 +4,7 @@ const app = require('../lib/app')
 const db = require('../lib/db')
 
 let data = {}
-
+let channel1 = {}, channel2 = {}
 describe('channels', () => {
 
 	it('Clear and populate the database', (done) => {
@@ -120,7 +120,7 @@ describe('channels', () => {
 		});
 	})
 	
-	it('create channel as user', (done) => {
+	it('create channel as user1', (done) => {
 		supertest(app)
 		.post('/channel')
 		.send({
@@ -131,7 +131,6 @@ describe('channels', () => {
 		.expect('Content-Type', /json/)
 		.expect((res) => {
 			try {
-				// console.log(res.body)
 				res.body.should.match({
 					name: "channel de test",
 					admins: [
@@ -148,7 +147,8 @@ describe('channels', () => {
 					id: /^\w+-\w+-\w+-\w+-\w+$/
 				})
 				
-				let channel = res.body;
+				let channel = res.body
+				channel1 = res.body
 				
 				supertest(app)
 				.get('/user/' + users.user1.id)
@@ -173,10 +173,8 @@ describe('channels', () => {
 					}
 				})
 				.end((err, res) => {
-					if (err) {
-						console.error(res.error);
-					}
-					done(err);
+					if (err)
+						throw new(res.error);
 				});
 				
 				
@@ -191,6 +189,270 @@ describe('channels', () => {
 			done(err);
 		});
 	})
+	
+	it('Add user2 to channel1 as user2 (non channelAdmin, non public)', (done) => {
+		supertest(app)
+		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.send({
+			token: users.user2.token
+		})
+		.expect(401)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			try {
+				res.body.should.match({
+					type : 2,
+					code : 401,
+					name : "missingPermission",
+					message : /^.+$/
+				})
+			} catch (e) {
+				throw new Error(e);
+			}
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+	})
+	
+	it('Add user2 to channel1 as user1 (channelAdmin, non public)', (done) => {
+		supertest(app)
+		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.send({
+			token: users.user1.token
+		})
+		.expect(200)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			try {
+				res.body.should.match({ 
+					name: 'channel de test',
+					admins: [ users.user1.id ],
+					members: [ /^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/ ],
+					messages: [],
+					settings: { private: true },
+					createdAt: /^\d+$/,
+					id: /^\w+-\w+-\w+-\w+-\w+$/,
+				})
+			} catch (e) {
+				throw new Error(e);
+			}
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+	})
+	
+	it('Remove user2 from channel1 as user1 (channelAdmin)', (done) => {
+		supertest(app)
+		.delete('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.send({
+			token: users.user1.token
+		})
+		.expect(200)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			try {
+				res.body.should.match({ 
+					name: 'channel de test',
+					admins: [ users.user1.id ],
+					members: [ users.user1.id ],
+					messages: [],
+					settings: { private: true },
+					createdAt: /^\d+$/,
+					id: /^\w+-\w+-\w+-\w+-\w+$/,
+				})
+			} catch (e) {
+				throw new Error(e);
+			}
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+	})
+	
+	it('Add user2 to channel1 as admin', (done) => {
+		supertest(app)
+		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.send({
+			token: users.admin.token
+		})
+		.expect(200)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			try {
+				res.body.should.match({ 
+					name: 'channel de test',
+					admins: [ users.user1.id ],
+					members: [ /^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/ ],
+					messages: [],
+					settings: { private: true },
+					createdAt: /^\d+$/,
+					id: /^\w+-\w+-\w+-\w+-\w+$/,
+				})
+			} catch (e) {
+				throw new Error(e);
+			}
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+	})
+	
+	it('Remove user2 from channel1 as admin', (done) => {
+		supertest(app)
+		.delete('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.send({
+			token: users.user1.token
+		})
+		.expect(200)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			try {
+				res.body.should.match({ 
+					name: 'channel de test',
+					admins: [ users.user1.id ],
+					members: [ users.user1.id ],
+					messages: [],
+					settings: { private: true },
+					createdAt: /^\d+$/,
+					id: /^\w+-\w+-\w+-\w+-\w+$/,
+				})
+			} catch (e) {
+				throw new Error(e);
+			}
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+	})
+	
+	it('Remove user2 to channel1 as self (non channelAdmin, non public)', (done) => {
+		
+		supertest(app)
+		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.send({
+			token: users.user1.token
+		})
+		.expect(200)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			supertest(app)
+			.delete('/channel/' + channel1.id + "/user/" + users.user2.id)
+			.send({
+				token: users.user2.token
+			})
+			.expect(200)
+			.expect('Content-Type', /json/)
+			.expect((res) => {
+				try {
+					res.body.should.match({ 
+						name: 'channel de test',
+						admins: [ users.user1.id ],
+						members: [ users.user1.id ],
+						messages: [],
+						settings: { private: true },
+						createdAt: /^\d+$/,
+						id: /^\w+-\w+-\w+-\w+-\w+$/,
+					})
+				} catch (e) {
+					throw new Error(e);
+				}
+			})
+			.end((err, res) => {
+				if (err) {
+					throw new Error(res.error);
+				}
+			});
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+		
+		
+		
+		
+		
+	})
+	
+	it('delete channel as user2 (non channelAdmin)', (done) => {
+		supertest(app)
+		.delete('/channel/' + channel1.id)
+		.send({
+			token: users.user2.token
+		})
+		.expect(401)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			try {
+				res.body.should.match({
+					type : 2,
+					code : 401,
+					name : "missingPermission",
+					message : /^.+$/
+				})
+			} catch (e) {
+				throw new Error(e);
+			}
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+	})
+	
+	it('delete channel as user1 (channelAdmin)', (done) => {
+		supertest(app)
+		.delete('/channel/' + channel1.id)
+		.send({
+			token: users.user1.token
+		})
+		.expect(200)
+		.expect('Content-Type', /json/)
+		.expect((res) => {
+			try {
+				res.body.should.match({ 
+					name: 'channel de test',
+					admins: [ users.user1.id ],
+					members: [ users.user1.id ],
+					messages: [],
+					settings: { private: true },
+					createdAt: /^\d+$/,
+					id: /^\w+-\w+-\w+-\w+-\w+$/,
+					deleted: true 
+				})
+			} catch (e) {
+				throw new Error(e);
+			}
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			done(err);
+		});
+	})
+	
 	/*
 	it('list empty', async () => {
 		db.admin.clear();
