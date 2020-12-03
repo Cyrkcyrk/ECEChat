@@ -6,10 +6,12 @@
 201 : unknownUser		404
 202 : unknownChannel		404
 
-3 : conflictUsername		409
-4 : badPassword			401
-6 : missingPermission		401
-7 : missingToken		400
+03 : conflictUsername		409
+04 : badPassword		401
+06 : missingPermission		401
+07 : missingToken		400
 
-8 : memberAlreadyExist		409
-9 : adminAlreadyExist		409
+08 : memberAlreadyExist		409
+09 : adminAlreadyExist		409
+10 : memberNotExist		409
+11 : adminNotExist		409

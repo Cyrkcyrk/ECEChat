@@ -192,7 +192,7 @@ describe('channels', () => {
 	
 	it('Add user2 to channel1 as user2 (non channelAdmin, non public)', (done) => {
 		supertest(app)
-		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.put(`/channel/${channel1.id}/user/${users.user2.id}`)
 		.send({
 			token: users.user2.token
 		})
@@ -220,7 +220,7 @@ describe('channels', () => {
 	
 	it('Add user2 to channel1 as user1 (channelAdmin, non public)', (done) => {
 		supertest(app)
-		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.put(`/channel/${channel1.id}/user/${users.user2.id}`)
 		.send({
 			token: users.user1.token
 		})
@@ -251,7 +251,7 @@ describe('channels', () => {
 	
 	it('Remove user2 from channel1 as user1 (channelAdmin)', (done) => {
 		supertest(app)
-		.delete('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.delete(`/channel/${channel1.id}/user/${users.user2.id}`)
 		.send({
 			token: users.user1.token
 		})
@@ -282,7 +282,7 @@ describe('channels', () => {
 	
 	it('Add user2 to channel1 as admin', (done) => {
 		supertest(app)
-		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.put(`/channel/${channel1.id}/user/${users.user2.id}`)
 		.send({
 			token: users.admin.token
 		})
@@ -313,7 +313,7 @@ describe('channels', () => {
 	
 	it('Remove user2 from channel1 as admin', (done) => {
 		supertest(app)
-		.delete('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.delete(`/channel/${channel1.id}/user/${users.user2.id}`)
 		.send({
 			token: users.user1.token
 		})
@@ -343,17 +343,18 @@ describe('channels', () => {
 	})
 	
 	it('Remove user2 to channel1 as self (non channelAdmin, non public)', (done) => {
-		
 		supertest(app)
-		.put('/channel/' + channel1.id + "/user/" + users.user2.id)
+		.put(`/channel/${channel1.id}/user/${users.user2.id}`)
 		.send({
 			token: users.user1.token
 		})
-		.expect(200)
-		.expect('Content-Type', /json/)
-		.expect((res) => {
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			
 			supertest(app)
-			.delete('/channel/' + channel1.id + "/user/" + users.user2.id)
+			.delete(`/channel/${channel1.id}/user/${users.user2.id}`)
 			.send({
 				token: users.user2.token
 			})
@@ -378,21 +379,147 @@ describe('channels', () => {
 				if (err) {
 					throw new Error(res.error);
 				}
+				done(err);
 			});
+		});
+	})
+	
+	it('Add user2 to adminlist of channel1 as self (non channelAdmin)', (done) => {
+		supertest(app)
+		.delete(`/channel/${channel1.id}/user/${users.user2.id}`)
+		.send({
+			token: users.admin.token
 		})
 		.end((err, res) => {
 			if (err) {
 				console.error(res.error);
 			}
-			done(err);
+			
+			supertest(app)
+			.put(`/channel/${channel1.id}/user/${users.user2.id}`)
+			.send({
+				token: users.admin.token
+			})
+			.end((err, res) => {
+				if (err) {
+					console.error(res.error);
+				}
+				
+				supertest(app)
+				.put(`/channel/${channel1.id}/admin/${users.user2.id}`)
+				.send({
+					token: users.user2.token
+				})
+				.expect(409)
+				.expect('Content-Type', /json/)
+				.expect((res) => {
+					try {
+						res.body.should.match({
+							type: 2,
+							code: 401,
+							name: 'missingPermission',
+							message: /^.+$/
+						})
+					} catch (e) {
+						throw new Error(e);
+					}
+				})
+				.end((err, res) => {
+					if (err) {
+						throw new Error(res.error);
+					}
+					done(err);
+				});
+			});
 		});
-		
-		
-		
-		
-		
 	})
 	
+	it('Add user2 to adminlist of channel1 as user1 (channelAdmin)', (done) => {
+		supertest(app)
+		.put(`/channel/${channel1.id}/user/${users.user2.id}`)
+		.send({
+			token: users.user1.token
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			supertest(app)
+			.put(`/channel/${channel1.id}/admin/${users.user2.id}`)
+			.send({
+				token: users.user1.token
+			})
+			.expect(200)
+			.expect('Content-Type', /json/)
+			.expect((res) => {
+				try {
+					console.log(res.body)
+					res.body.should.match({
+						name: 'channel de test',
+						admins: [/^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/],
+						members: [/^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/],
+						messages: [],
+						settings: { private: true },
+						createdAt: /^\d+$/,
+						id: /^\w+-\w+-\w+-\w+-\w+$/, 
+					})
+				} catch (e) {
+					throw new Error(e);
+				}
+			})
+			.end((err, res) => {
+				if (err) {
+					throw new Error(res.error);
+				}
+				done(err);
+			});
+		});
+	})
+	
+	it('Remove user2 from adminlist of channel1 as user1 (channelAdmin)', (done) => {
+		supertest(app)
+		.put(`/channel/${channel1.id}/user/${users.user2.id}`)
+		.send({
+			token: users.user1.token
+		})
+		.end((err, res) => {
+			if (err) {
+				console.error(res.error);
+			}
+			supertest(app)
+			.put(`/channel/${channel1.id}/admin/${users.user2.id}`)
+			.send({
+				token: users.user1.token
+			})
+			.expect(200)
+			.expect('Content-Type', /json/)
+			.expect((res) => {
+				try {
+					console.log(res.body)
+					res.body.should.match({
+						name: 'channel de test',
+						admins: [/^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/],
+						members: [/^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/],
+						messages: [],
+						settings: { private: true },
+						createdAt: /^\d+$/,
+						id: /^\w+-\w+-\w+-\w+-\w+$/, 
+					})
+				} catch (e) {
+					throw new Error(e);
+				}
+			})
+			.end((err, res) => {
+				if (err) {
+					throw new Error(res.error);
+				}
+				done(err);
+			});
+		});
+	})
+	
+	
+
 	it('delete channel as user2 (non channelAdmin)', (done) => {
 		supertest(app)
 		.delete('/channel/' + channel1.id)
