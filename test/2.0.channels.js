@@ -134,7 +134,10 @@ describe('channels', () => {
 					members: [
 						users.user1.id
 					],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: {
 						private: true
 					},
@@ -199,7 +202,10 @@ describe('channels', () => {
 					name: 'channel de test',
 					admins: [ users.user1.id ],
 					members: [ /^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/ ],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: { private: true },
 					createdAt: /^\d+$/,
 					id: /^\w+-\w+-\w+-\w+-\w+$/,
@@ -263,7 +269,10 @@ describe('channels', () => {
 					members: [
 						users.user1.id
 					],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: {
 						private: true
 					},
@@ -358,7 +367,10 @@ describe('channels', () => {
 							/^\w+-\w+-\w+-\w+-\w+$/,
 							/^\w+-\w+-\w+-\w+-\w+$/
 						],
-						messages: [],
+						messages : {
+							last : "",
+							list : []
+						},
 						settings: {
 							private: true
 						},
@@ -399,7 +411,10 @@ describe('channels', () => {
 								/^\w+-\w+-\w+-\w+-\w+$/,
 								/^\w+-\w+-\w+-\w+-\w+$/
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},
@@ -414,7 +429,10 @@ describe('channels', () => {
 							members: [
 								users.user1.id
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},
@@ -432,7 +450,10 @@ describe('channels', () => {
 							members: [
 								users.user1.id
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},
@@ -448,7 +469,10 @@ describe('channels', () => {
 								/^\w+-\w+-\w+-\w+-\w+$/,
 								/^\w+-\w+-\w+-\w+-\w+$/
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},
@@ -490,7 +514,10 @@ describe('channels', () => {
 								/^\w+-\w+-\w+-\w+-\w+$/,
 								/^\w+-\w+-\w+-\w+-\w+$/
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},
@@ -505,7 +532,10 @@ describe('channels', () => {
 							members: [
 								users.user1.id
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},
@@ -523,7 +553,10 @@ describe('channels', () => {
 							members: [
 								users.user1.id
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},
@@ -539,7 +572,10 @@ describe('channels', () => {
 								/^\w+-\w+-\w+-\w+-\w+$/,
 								/^\w+-\w+-\w+-\w+-\w+$/
 							],
-							messages: [],
+							messages : {
+								last : "",
+								list : []
+							},
 							settings: {
 								private: true
 							},

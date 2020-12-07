@@ -37,7 +37,10 @@ describe('channels as non members', () => {
 					members: [
 						users.user1.id
 					],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: {
 						private: true
 					},

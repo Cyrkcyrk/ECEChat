@@ -1,17 +1,23 @@
+100 : missingToken		400
 101 : missingUsername		400
 102 : missingPassword		400
 103 : missingChannelName	400
-104 : missinChannelOwner	400
+104 : missingChannelOwner	400
+105 : missingChannel		400
+106 : missingContent		400
+107 : missingUserID		400
 
 201 : unknownUser		404
 202 : unknownChannel		404
+203 : unknownMessage		404
 
 03 : conflictUsername		409
 04 : badPassword		401
 06 : missingPermission		401
-07 : missingToken		400
+
 
 08 : memberAlreadyExist		409
 09 : adminAlreadyExist		409
 10 : memberNotExist		409
 11 : adminNotExist		409
+12 : messageNotExist		409

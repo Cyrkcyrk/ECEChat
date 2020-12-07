@@ -37,7 +37,10 @@ describe('channels as members', () => {
 					members: [
 						users.user1.id
 					],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: {
 						private: true
 					},
@@ -100,7 +103,10 @@ describe('channels as members', () => {
 					name: 'channel de test',
 					admins: [ users.user1.id ],
 					members: [ /^\w+-\w+-\w+-\w+-\w+$/, /^\w+-\w+-\w+-\w+-\w+$/ ],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: { private: true },
 					createdAt: /^\d+$/,
 					id: /^\w+-\w+-\w+-\w+-\w+$/,
@@ -220,7 +226,10 @@ describe('channels as members', () => {
 						/^\w+-\w+-\w+-\w+-\w+$/,
 						/^\w+-\w+-\w+-\w+-\w+$/
 					],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: {
 						"private": true
 					},
@@ -397,7 +406,10 @@ describe('channels as members', () => {
 					members: [
 						users.user1.id
 					],
-					messages: [],
+					messages : {
+						last : "",
+						list : []
+					},
 					settings: {
 						private: true
 					},
