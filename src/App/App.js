@@ -96,19 +96,11 @@ export default class App extends React.Component {
 	
 	fetchChannels = () => {
 		try {
-			const requestOptions = {
-				method: 'GET',
-				headers: { 
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + this.state.token
-				}
-			};
-			fetch('http://localhost:3001/channels', requestOptions)
-			.then(response => response.json())
+			fetchLib.get(this.state.token, `channels/`)
 			.then(data => {
 				console.log(data)
 				this.setState({
-					channels : data,
+					channels : data.content,
 					logged : true
 				})
 			})

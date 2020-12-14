@@ -1,4 +1,5 @@
 
+let websiteURL = 'http://localhost:3001'
 
 module.exports = {
 	get : (token, route) => {
@@ -11,7 +12,7 @@ module.exports = {
 						'Authorization': `Bearer ${token}`
 					}
 				};
-				fetch(`http://localhost:3001/${route}`, requestOptions)
+				fetch(`${websiteURL}/${route}`, requestOptions)
 				.then(response => {
 					response.json()
 					.then(data => {
@@ -49,7 +50,7 @@ module.exports = {
 					},
 					body: body
 				};
-				fetch(`http://localhost:3001/${route}`, requestOptions)
+				fetch(`${websiteURL}/${route}`, requestOptions)
 				.then(response => {
 					response.json()
 					.then(data => {
@@ -87,7 +88,7 @@ module.exports = {
 					},
 					body: body
 				};
-				fetch(`http://localhost:3001/${route}`, requestOptions)
+				fetch(`${websiteURL}/${route}`, requestOptions)
 				.then(response => {
 					response.json()
 					.then(data => {
@@ -126,7 +127,7 @@ module.exports = {
 					},
 					body: body
 				};
-				fetch(`http://localhost:3001/${route}`, requestOptions)
+				fetch(`${websiteURL}/${route}`, requestOptions)
 				.then(response => {
 					response.json()
 					.then(data => {
