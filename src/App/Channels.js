@@ -1,6 +1,7 @@
 import React from 'react';
+import DialogCreateChannel from './DialogCreateChannel.js';
 const styles = require('./Style.js').styles
-
+ 
 class ChannelThumbnail extends React.Component {
 	render() {
 		return (
@@ -24,14 +25,21 @@ export default class Channels extends React.Component {
 			<div style={styles.channels}>
 				<ul>
 					{ this.props.channels.map( (_channel, i) => (
-						<ChannelThumbnail 
-							channel = {_channel}
-							id = {i}
-							onClick = {() => { this.props.onClick(i)}}
-						/>
+						<span key={_channel.id}>
+							<ChannelThumbnail 
+								channel = {_channel}
+								id = {i}
+								onClick = {() => { this.props.onClick(i)}}
+							/>
+						</span>
 					))}
 				</ul>
+				<DialogCreateChannel 
+					addChannel = {(_name) => this.props.addChannel(_name)}
+				/>
 			</div>
 		);
 	}
 }
+
+

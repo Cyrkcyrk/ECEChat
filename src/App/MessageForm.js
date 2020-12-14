@@ -2,12 +2,12 @@ import React from 'react';
 const styles = require('./Style.js').styles
 
 const MessageForm = function(props) {
+
 	function onSubmit(e) {
 		e.preventDefault()
 		const data = new FormData(e.target)
 		props.addMessage({
 			content: data.get('content'),
-			channelID : props.channelID
 		})
 		e.target.elements.content.value = ''
 	}

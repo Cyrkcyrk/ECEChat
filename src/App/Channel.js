@@ -1,5 +1,7 @@
 import React from 'react';
-import Messages from './Messages.js';
+import appContext from './appContext.js';
+
+import Messages from './MessagesList.js';
 import MessageForm from './MessageForm.js';
 const styles = require('./Style.js').styles
 
@@ -9,13 +11,14 @@ export default class Channel extends React.Component {
 			<div style={styles.channel}>
 				<h1>Messages for {this.props.channel.name}</h1>
 				<Messages 
-					messages={this.props.channel.messages}
+					messages={this.props.channel.messagesData}
+					channel = {this.props.channel}
 				/>
 				<MessageForm 
 					addMessage = {this.props.addMessage}
-					channelID = {this.props.channelID}
 				/>
 			</div>
 		)
 	}
 }
+Channel.contextType = appContext;

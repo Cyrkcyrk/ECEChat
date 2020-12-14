@@ -1,15 +1,13 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
+
 import './App.css';
-import Header from './Header.js';
-import Main from './MainV2.js';
-import Footer from './Footer.js';
-import Login from './Login.js';
+import Main from './Main.js';
+import Login from './Login2.js';
 
 import appContext from './appContext.js';
 
 const fetchLib = require('./fetch.js')
-
-const styles = require('./Style.js').styles
 
 
 export default class App extends React.Component {
@@ -87,14 +85,15 @@ export default class App extends React.Component {
 		if(this.state.logged)
 			return (
 				<appContext.Provider value={this.state}>
-					<div className="App" style={styles.root}>
-						<Header />
+					<div className="App">
+						<Box
+							height="40px"
+						/>
 						<Main 
 							token = {this.state.token}
 							channels = {this.state.channels}
 							disconnect = {() => { this.disconnect()}}
 						/>
-						<Footer />
 					</div>
 				</appContext.Provider>
 			);
