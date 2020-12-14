@@ -7,7 +7,7 @@ exports.styles = {
 		padding: '50px',
 	},
 	header: {
-		height: '60px',
+		height: '30px',
 		backgroundColor: 'rgba(255,255,255,.3)',
 		flexShrink: 0,
 	},

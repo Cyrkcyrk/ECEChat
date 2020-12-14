@@ -1,24 +1,29 @@
 import React from 'react';
-import appContext from './appContext.js';
+import Box from '@material-ui/core/Box';
 
-import Messages from './MessagesList.js';
+import Messages from './Messages.js'
 import MessageForm from './MessageForm.js';
-const styles = require('./Style.js').styles
 
-export default class Channel extends React.Component {
-	render() {
-		return (
-			<div style={styles.channel}>
-				<h1>Messages for {this.props.channel.name}</h1>
+
+export default function Channel (props) {
+	return (
+		<div>
+			<Box
+				width="100%"
+			>
 				<Messages 
-					messages={this.props.channel.messagesData}
-					channel = {this.props.channel}
+					messages={props.channel.messagesData}
+					channel = {props.channel}
 				/>
+			</Box>
+			<Box 
+				width="100%"
+			>
 				<MessageForm 
-					addMessage = {this.props.addMessage}
+					addMessage = {props.addMessage}
 				/>
-			</div>
-		)
-	}
+			</Box>
+		</div>
+	)
 }
-Channel.contextType = appContext;
+

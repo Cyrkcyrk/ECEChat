@@ -1,18 +1,10 @@
-import React from 'react';
+import React, {useRef, useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
-import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
-import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
-
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +24,58 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 export default function DialogRegister(props) {
-	const classes = useStyles();
+	const classes = useStyles()
+	let textFieldUsername = useRef()
+	let textFieldPassword = useRef()
+	let textFieldPasswordCheck = useRef()
+	let [usernameAvailable, setUsernameAvailable] = useState(true)
+	let [passwordMatch, setPasswordMatch] = useState({
+			status : 0,
+			message : ""
+		})
+	
+	const handleRegister = (e) => {
+		e.preventDefault(); 
+		const data = new FormData(e.target)
+		
+		if(usernameAvailable && passwordMatch) {
+			console.log(data.get("username"))
+			console.log(data.get("email"))
+			console.log(data.get("password"))
+			props.register(data.get("username"), data.get("email"), data.get("password"))
+		}
+	}
+	
+	let checkUsernameAvailable = () => {
+		console.log(textFieldUsername.current.value)
+		props.checkUsername(textFieldUsername.current.value).then(available => {
+			console.log(available)
+			setUsernameAvailable(available)
+		})
+	}
+	
+	const checkPasswordMatch = (e) => {
+		let pswd = textFieldPassword.current.value
+		let pswdCheck = textFieldPasswordCheck.current.value
+		
+		if(pswdCheck.length === 0)
+			setPasswordMatch({
+				status : 0,
+				message : ""
+			})
+		else {
+			if (pswdCheck === pswd)
+				setPasswordMatch({
+					status : 1,
+					message : ""
+				})
+			else
+				setPasswordMatch({
+					status : -1,
+					message : "Passwords doesn't match"
+				})
+		}
+	}
 	
 	const handleClose = () => {
 		props.setOpen(false);
@@ -50,8 +93,10 @@ export default function DialogRegister(props) {
 				
 				<div className={classes.paper}>
 					
-					<form style={{width : "50%"}}>
+					<form style={{width : "50%"}} onSubmit = {handleRegister}>
 						<TextField
+							inputRef={textFieldUsername}
+							onBlur = {checkUsernameAvailable}
 							margin="normal"
 							required
 							fullWidth
@@ -59,6 +104,9 @@ export default function DialogRegister(props) {
 							autoFocus
 							variant = "outlined"
 							label = "Username"
+							error = {!usernameAvailable ? true : false}
+							helperText = {!usernameAvailable? "This username is already taken" : null}
+							
 						/>
 						<TextField
 							variant="outlined"
@@ -74,6 +122,7 @@ export default function DialogRegister(props) {
 								width = '48%'
 							>
 								<TextField
+									inputRef={textFieldPassword}
 									margin="normal"
 									required
 									fullWidth
@@ -92,6 +141,8 @@ export default function DialogRegister(props) {
 								width='48%'
 							>
 								<TextField
+									inputRef={textFieldPasswordCheck}
+									onBlur = {checkPasswordMatch}
 									margin="normal"
 									required
 									fullWidth
@@ -100,6 +151,8 @@ export default function DialogRegister(props) {
 									variant = "outlined"
 									label = "Confirm Password"
 									type = "password"
+									error = {passwordMatch.status === -1 ? true : false}
+									helperText = {passwordMatch.message? passwordMatch.message : null}
 								/>
 							</Box>
 						</Box>

@@ -1,11 +1,7 @@
 import React from 'react';
-import { Button } from '@material-ui/core';
-import appContext from './appContext.js';
+import List from "@material-ui/core/List";
 
 import Message from './Message.js';
-
-const styles = require('./Style.js').styles
-const fetchLib = require('./fetch.js')
 
 export default class Messages extends React.Component {	
 	scrollToBottom = () => {
@@ -19,23 +15,21 @@ export default class Messages extends React.Component {
 	componentDidUpdate() {
 		this.scrollToBottom();
 	}
-
+	
 	render() {
 		return (
-			<div style={styles.messages}>
-				<ul>
+			<div>
+				<List>
 					{ this.props.messages.slice(0).reverse().map( (_message, i) => (
-						<span key={'message:' + _message.id}>
-							<Message 
-								message = {_message}
-								channel = {this.props.channel}
-							/>
-						</span>
+						<Message 
+							message = {_message}
+							channel = {this.props.channel}
+						/>
 					))}
 					<div style={{ float:"left", clear: "both" }}
 						ref={(el) => { this.messagesEnd = el; }}>
 					</div>
-				</ul>
+				</List>
 			</div>
 		)
 	}

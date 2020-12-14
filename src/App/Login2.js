@@ -23,7 +23,8 @@ const useStyles = makeStyles((theme) => ({
 export default function Login(props) {
 	const classes = useStyles();
 	const [register, setRegisterOpen] = React.useState(false);
-	const [showPassword, setShowPassword] = useState(false);
+	// const [showPassword, setShowPassword] = useState(false);
+	const [showPassword] = useState(false);
 	
 	const [state, setState] = useState({
 		usernameProperties : {
@@ -92,6 +93,8 @@ export default function Login(props) {
 			<DialogRegister
 				open = {register}
 				setOpen = {(status) => setRegisterOpen(status)}
+				checkUsername = {props.checkUsername}
+				register = {props.register}
 			/>
 			<Typography variant="h3">
 				ECEChat

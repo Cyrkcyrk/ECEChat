@@ -1,32 +1,17 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import ListItemText from '@material-ui/core/ListItemText';
+import React from "react";
+import Drawer from "@material-ui/core/Drawer";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		width: '100%',
-		maxWidth: '36ch',
-		// backgroundColor:
-	},
-
-	inline: {
-		display: 'inline',
-	},
-}));
-
+import DialogCreateChannel from './DialogCreateChannel.js';
 
 class ChannelThumbnail extends React.Component {
 	render() {
 		let lastMessage = "No message"
-		console.log("LAST MESSAGE")
-		console.log(this.props.channel.messages.last)
-		console.log(typeof(this.props.channel.messages.last))
 		if(typeof(this.props.channel.messages.last) === "object")
 			lastMessage = this.props.channel.messages.last.content
 		if(lastMessage.length > 30) {
@@ -36,6 +21,7 @@ class ChannelThumbnail extends React.Component {
 		
 		return (
 			<ListItem 
+				button
 				alignItems="flex-start" 
 				onClick={this.props.onClick}
 			>
@@ -56,22 +42,36 @@ class ChannelThumbnail extends React.Component {
 }
 
 
-
-export default function Channels(props) {
-	const classes = useStyles();
-	//<Divider variant="inset" component="li" />
+export default function PanelLeft(props) {
 	return (
-		<List className={classes.root}>
-			{ props.channels.map( (_channel, i) => (
-				
-				<ChannelThumbnail
-					key = {_channel.id}
-					channel = {_channel}
-					id = {i}
-					classes = {classes}
-					onClick = {() => { props.onClick(i)}}
+		<Drawer
+			className={props.classes.drawer}
+			variant="persistent"
+			anchor="left"
+			open={true}
+			classes={{
+				paper: props.classes.drawerPaper
+			}}
+		>
+			<div className={props.classes.drawerHeader}></div>
+			<Divider />
+			<List>
+				{ props.channels.map( (_channel, i) => (
+					<ChannelThumbnail
+						key = {_channel.id}
+						channel = {_channel}
+						id = {i}
+						onClick = {() => { props.onClick(i)}}
+					/>
+				))}
+			</List>
+			<Divider />
+			<List>
+				<DialogCreateChannel 
+					addChannel = {(name) => props.addChannel(name)}
 				/>
-			))}
-		</List>
-	);
+			</List>
+			<Divider />
+		</Drawer>
+	)
 }

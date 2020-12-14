@@ -1,15 +1,13 @@
 import React from 'react';
+import Box from '@material-ui/core/Box';
+
 import './App.css';
-import Header from './Header.js';
-import Main from './MainV2.js';
-import Footer from './Footer.js';
-import Login from './Login.js';
+import Main from './Main.js';
+import Login from './Login2.js';
 
 import appContext from './appContext.js';
 
 const fetchLib = require('./fetch.js')
-
-const styles = require('./Style.js').styles
 
 
 export default class App extends React.Component {
@@ -57,6 +55,45 @@ export default class App extends React.Component {
 		})
 	}
 	
+	register = (usrname, mail, passwd) => {
+		return new Promise((resolve, reject) => {
+			fetchLib.post("", "user", {
+				username : usrname,
+				password : passwd,
+				email : mail
+			})
+			.then(data => {
+				this.connect(usrname, passwd)
+			})
+			.catch(e => {
+				if(e.status !== -1 && e.error.type && e.error.type === 2)
+					reject(e.error)
+				else {
+					alert("Erreur")
+					console.log(e)
+				}
+			})
+		})
+	}
+	
+	checkUsername(username) {
+		return new Promise((resolve, reject) => {
+			fetchLib.get(this.context.token, `username/${username}`)
+			.then(data => {
+				resolve(false)
+			}).catch(e => {
+				if(e.error.type && e.error.type === 2 && e.error.name === 'unknownUser')
+					resolve(true)
+				else {
+					alert('Error while getting by username')
+					console.error (e)
+					reject(null);
+				}
+			})
+
+		})
+	}
+	
 	fetchChannels = () => {
 		try {
 			const requestOptions = {
@@ -81,20 +118,19 @@ export default class App extends React.Component {
 		}
 	}
 	
-	
-	
 	render() {
 		if(this.state.logged)
 			return (
 				<appContext.Provider value={this.state}>
-					<div className="App" style={styles.root}>
-						<Header />
+					<div className="App">
+						<Box
+							height="40px"
+						/>
 						<Main 
 							token = {this.state.token}
 							channels = {this.state.channels}
 							disconnect = {() => { this.disconnect()}}
 						/>
-						<Footer />
 					</div>
 				</appContext.Provider>
 			);
@@ -102,6 +138,9 @@ export default class App extends React.Component {
 			return (
 				<Login 
 					login = {(_usrname, _passwd) => this.connect(_usrname, _passwd)}
+					checkUsername = {(_usrname) => this.checkUsername(_usrname)}
+					register = {(_usrname, _mail, _pswd) => this.register(_usrname, _mail, _pswd)}
+					
 				/>
 			);
 	}

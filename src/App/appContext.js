@@ -1,6 +1,10 @@
 import React from "react";
 
-export default React.createContext({
+const AppContext = React.createContext({
 	toggleLogged: () => {},
 	logged : false,
 });
+
+export const AppProvider = AppContext.Provider
+
+export default AppContext
