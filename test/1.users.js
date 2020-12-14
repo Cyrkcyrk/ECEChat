@@ -7,7 +7,6 @@ let userAdmin = {}, userNormal = {}
 
 describe('users', () => {
 
-	
 	it('add one admin user', (done) => {
 		db.admin.clear().then(_ => {
 			supertest(app)
@@ -86,7 +85,7 @@ describe('users', () => {
 
 	it('loging in as admin', (done) => {
 		supertest(app)
-		.get('/login')
+		.post('/login')
 		.send({
 			username: 'admin_test',
 			password: "admin"
@@ -95,11 +94,22 @@ describe('users', () => {
 		.expect('Content-Type', /json/)
 		.expect((res) => {
 			try {
-				res.body.should.match(/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\w+\.\w+/)
+				res.body.should.match({
+					username: "admin_test",
+					scope: {
+						user: true,
+						test: true,
+						admin: true
+					},
+					channels: [],
+					createdAt: /^\d+$/,
+					id: /^\w+-\w+-\w+-\w+-\w+$/,
+					token: /eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\w+\.\w+/
+				})
 			} catch (e) {
 				throw new Error(e)
 			}
-			userAdmin.token = res.body
+			userAdmin.token = res.body.token
 		})
 		.end((err, res) => {
 			if (err) {
@@ -120,11 +130,22 @@ describe('users', () => {
 		.expect('Content-Type', /json/)
 		.expect((res) => {
 			try {
-				res.body.should.match(/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\w+\.\w+/)
+				res.body.should.match({
+					username: "user_test",
+					scope: {
+						user: true,
+						test: true,
+						admin: false
+					},
+					channels: [],
+					createdAt: /^\d+$/,
+					id: /^\w+-\w+-\w+-\w+-\w+$/,
+					token: /eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.\w+\.\w+/
+				})
 			} catch (e) {
 				throw new Error(e);
 			}
-			userNormal.token = res.body
+			userNormal.token = res.body.token
 		})
 		.end((err, res) => {
 			if (err) {
