@@ -10,6 +10,8 @@ import appContext from './appContext.js';
 const fetchLib = require('./fetch.js')
 
 
+
+
 export default class App extends React.Component {
 	constructor(props) {
 		super(props);
@@ -20,9 +22,16 @@ export default class App extends React.Component {
 			})
 		}
 		
+		this.setLoggedUser = (user) => {
+			this.setState ({
+				loggedUser : user
+			})
+		}
+		
 		this.state = {
 			logged: false,
-			disconnect : this.disconnect
+			disconnect : this.disconnect,
+			setLoggedUser : this.setLoggedUser
 		}
 		
 		this.connect = this.connect.bind(this)

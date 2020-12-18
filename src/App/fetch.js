@@ -1,7 +1,27 @@
-
+let MD5 = require('md5')
 let websiteURL = 'http://localhost:3001'
 
 module.exports = {
+	url : websiteURL,
+	gravatar : (email, userID) => {
+		
+		let hash
+		if(email) {
+			email = email.trim().toLowerCase()
+			if(email.length > 3)
+				hash = MD5(email)
+			else
+				hash = MD5(userID)
+		}
+		else
+			hash = MD5(userID)
+		let link = `https://www.gravatar.com/avatar/${hash}?s=100&d=identicon`
+		
+		
+		console.log(hash)
+		return (link)
+	},
+	
 	get : (token, route) => {
 		return new Promise((resolve, reject) => {
 			try {

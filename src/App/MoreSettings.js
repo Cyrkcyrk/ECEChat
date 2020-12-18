@@ -20,13 +20,25 @@ export default function MoreSettings(props) {
 	const open = Boolean(anchorEl);
 	const id = open ? 'simple-popover' : undefined;
 	
+	let IconProps = props.icon
+	
 	return (
 		<span>
 			<IconButton 
 				onClick={handleClick}
+				edge="end"
+				color = {props.color ? props.color : ''}
 			>
-				<MoreIcon />
+			{
+				IconProps? (
+					<IconProps />
+				) : (
+					<MoreIcon />
+				)
+			}
 			</IconButton>
+				
+			
 			<Popover
 				id={id}
 				open={open}

@@ -1,16 +1,20 @@
 import React from "react";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import Box from "@material-ui/core/Box";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import appContext from './appContext.js';
 import ChannelsList from './ChannelsList.js'
 import ChannelSettingsPanel from './ChannelSettingsPanel.js'
 import Channel from './Channel.js'; 
+import MoreSettings from './MoreSettings.js';
+import DialogUserSettings from './DialogUserSettings.js';
 
 const fetchLib = require('./fetch.js')
 
@@ -83,7 +87,8 @@ class MainClass extends React.Component {
 		this.state = {
 			// selectedChannel: this.props.channels[0],
 			channels : this.props.channels,
-			rightPannel : false
+			rightPannel : false,
+			userSettingsStatus : false
 		};
 	}
 	
@@ -135,7 +140,6 @@ class MainClass extends React.Component {
 			}
 		})
 	}
-	
 	
 	addMessage(message) {
 		fetchLib.post(this.context.token, "message/", {
@@ -311,10 +315,19 @@ class MainClass extends React.Component {
 		})
 	}
 	
+	setUserSettingsStatus(status) {
+		this.setState ({
+			userSettingsStatus : status
+		})
+	}
 	
 	render() {
 		return (
 			<div className={this.props.classes.root}>
+				<DialogUserSettings
+					open = {this.state.userSettingsStatus}
+					setOpen = {(status) => this.setUserSettingsStatus(status)}
+				/>
 				<AppBar
 					position="fixed"
 					className={clsx(this.props.classes.appBar, {
@@ -326,7 +339,24 @@ class MainClass extends React.Component {
 							<Typography variant="h6" noWrap className={this.props.classes.title}>
 								{this.state.selectedChannel.name}
 							</Typography>
-						) : (null)}
+						) : (<Typography variant="h6" noWrap className={this.props.classes.title}>
+								{'ECEChat'}
+							</Typography>
+						)}
+						<MoreSettings
+							buttons = {[
+								{
+									text : "Settings",
+									fct : () => this.setUserSettingsStatus(true)
+								},
+								{
+									text : "Logout",
+									fct : this.context.disconnect
+								}
+							]}
+							icon = {AccountCircle}
+							color = 'inherit'
+						/>
 						
 						{this.state.selectedChannel ? (
 							<IconButton

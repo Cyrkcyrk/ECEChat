@@ -150,7 +150,7 @@ export default class Message extends React.Component {
 				onMouseLeave = {() => this.setMouseOver(0)}
 			>
 				<ListItemAvatar>
-					<Avatar alt={this.state.message.author.username + ' username'} src={this.state.message.author.avatar} />
+					<Avatar alt={this.state.message.author.username + ' username'} src={`${fetchLib.url}/user/${this.state.message.author.id}/avatar`} />
 				</ListItemAvatar>
 				<ListItemText
 					

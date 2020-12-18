@@ -41,9 +41,9 @@ export default function Login(props) {
 		}
 	})
 	
-	const handleSubmit = (e) => {
-		e.preventDefault(); 
-		const data = new FormData(e.target)
+	const handleSubmit = (ev) => {
+		ev.preventDefault(); 
+		const data = new FormData(ev.target)
 		
 		props.login(
 			data.get("username"),
