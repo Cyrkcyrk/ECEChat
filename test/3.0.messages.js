@@ -436,7 +436,11 @@ describe('messages', () => {
 		.expect((res) => {
 			try {
 				res.body.should.match({
-					author: users.user2.id,
+					author: {
+						username : 'user2',
+						id : users.user2.id,
+						scope : users.user2.scope
+					},
 					channelID: channel1.id,
 					content: 'Bonjour ceci est un premier message.',
 					createdAt: message1.createdAt,
@@ -465,7 +469,11 @@ describe('messages', () => {
 		.expect((res) => {
 			try {
 				res.body.should.match({
-					author: users.user2.id,
+					author: {
+						username : 'user2',
+						id : users.user2.id,
+						scope : users.user2.scope
+					},
 					channelID: channel1.id,
 					content: 'Bonjour ceci est un premier message.',
 					createdAt: message1.createdAt,
@@ -494,7 +502,11 @@ describe('messages', () => {
 		.expect((res) => {
 			try {
 				res.body.should.match({
-					author: users.user2.id,
+					author: {
+						username : 'user2',
+						id : users.user2.id,
+						scope : users.user2.scope
+					},
 					channelID: channel1.id,
 					content: 'Bonjour ceci est un premier message.',
 					createdAt: message1.createdAt,
@@ -875,7 +887,7 @@ describe('messages', () => {
 						res.body.should.match({
 							author: users.user2.id,
 							channelID: channel1.id,
-							content: 'Message deleted.',
+							content: 'Ce message sera supprime.',
 							createdAt: msg.createdAt,
 							removed: true,
 							id: msg.id
@@ -913,7 +925,11 @@ describe('messages', () => {
 		.expect((res) => {
 			try {
 				res.body.should.match({
-					author: users.user2.id,
+					author: {
+						username : 'user2',
+						id : users.user2.id,
+						scope : users.user2.scope
+					},
 					channelID: channel1.id,
 					content: 'Message deleted.',
 					createdAt: message1.createdAt,
@@ -943,7 +959,11 @@ describe('messages', () => {
 		.expect((res) => {
 			try {
 				res.body.should.match({
-					author: users.user2.id,
+					author: {
+						username : 'user2',
+						id : users.user2.id,
+						scope : users.user2.scope
+					},
 					channelID: channel1.id,
 					content: 'Message deleted.',
 					createdAt: message1.createdAt,
@@ -973,7 +993,11 @@ describe('messages', () => {
 		.expect((res) => {
 			try {
 				res.body.should.match({
-					author: users.user2.id,
+					author: {
+						username : 'user2',
+						id : users.user2.id,
+						scope : users.user2.scope
+					},
 					channelID: channel1.id,
 					content: 'Ceci est un message edite par superadmin',
 					createdAt: message1.createdAt,

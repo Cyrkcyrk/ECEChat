@@ -110,7 +110,7 @@ describe('Fetch messages from channels', () => {
 
 	it('Fetch the last 50 (default) messages from channel1 as user3 (non member, non admin)', (done) => {
 		supertest(app)
-		.get(`/channel/${channel1.id}/fetch/`)
+		.get(`/channel/${channel1.id}/messages/`)
 		.send({
 			token: users.user3.token
 		})
@@ -138,7 +138,7 @@ describe('Fetch messages from channels', () => {
 	
 	it('Fetch the last 50 (default) messages from channel1 as user2 (member, non admin)', (done) => {
 		supertest(app)
-		.get(`/channel/${channel1.id}/fetch/`)
+		.get(`/channel/${channel1.id}/messages/`)
 		.send({
 			token: users.user2.token
 		})
@@ -148,64 +148,104 @@ describe('Fetch messages from channels', () => {
 			try {
 				res.body.should.match([ 
 					{
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: `"Don't ever, for any reason, do anything, to anyone, for any reason, ever, no matter what, no matter where, or who, or who you are with, or where you are going, or where you've been, ever, for any reason whatsoever. - Michael Scott"`,
 						createdAt: messages[9].createdAt,
 						id: messages[9].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "J'ai edite ce message huehuehue",
 						edited: true,
 						createdAt: messages[8].createdAt,
 						id: messages[8].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: 'Bah je sais pas non plus',
 						createdAt: messages[7].createdAt,
 						id: messages[7].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Mais je sais pas quoi ecrire',
 						createdAt: messages[6].createdAt,
 						id: messages[6].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "Okay, j'ai besoins d'écrire d'autres trucs",
 						createdAt: messages[5].createdAt,
 						id: messages[5].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: "Haha, j'ai vus avant que tu delete",
 						createdAt: messages[4].createdAt,
 						id: messages[4].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Message deleted.',
 						removed: true,
 						createdAt: messages[3].createdAt,
 						id: messages[3].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "C'est des messages de test",
 						createdAt: messages[2].createdAt,
 						id: messages[2].id
 					},
 					{
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: 'Salut',
 						createdAt: messages[1].createdAt,
 						id: messages[1].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Bonjour',
 						createdAt: messages[0].createdAt,
@@ -226,7 +266,7 @@ describe('Fetch messages from channels', () => {
 	
 	it('Fetch the last 50 (default) messages from channel1 as user1 (member, admin)', (done) => {
 		supertest(app)
-		.get(`/channel/${channel1.id}/fetch/`)
+		.get(`/channel/${channel1.id}/messages/`)
 		.send({
 			token: users.user1.token
 		})
@@ -236,63 +276,103 @@ describe('Fetch messages from channels', () => {
 			try {
 				res.body.should.match([ 
 					{
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: `"Don't ever, for any reason, do anything, to anyone, for any reason, ever, no matter what, no matter where, or who, or who you are with, or where you are going, or where you've been, ever, for any reason whatsoever. - Michael Scott"`,
 						createdAt: messages[9].createdAt,
 						id: messages[9].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "J'ai edite ce message huehuehue",
 						edited: true,
 						createdAt: messages[8].createdAt,
 						id: messages[8].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: 'Bah je sais pas non plus',
 						createdAt: messages[7].createdAt,
 						id: messages[7].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Mais je sais pas quoi ecrire',
 						createdAt: messages[6].createdAt,
 						id: messages[6].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "Okay, j'ai besoins d'écrire d'autres trucs",
 						createdAt: messages[5].createdAt,
 						id: messages[5].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: "Haha, j'ai vus avant que tu delete",
 						createdAt: messages[4].createdAt,
 						id: messages[4].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Message deleted.',
 						removed: true,
 						createdAt: messages[3].createdAt,
 						id: messages[3].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "C'est des messages de test",
 						createdAt: messages[2].createdAt,
 						id: messages[2].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: 'Salut',
 						createdAt: messages[1].createdAt,
 						id: messages[1].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Bonjour',
 						createdAt: messages[0].createdAt,
@@ -313,7 +393,7 @@ describe('Fetch messages from channels', () => {
 	
 	it('Fetch the last 50 (default) messages from channel1 as admin (superadmin)', (done) => {
 		supertest(app)
-		.get(`/channel/${channel1.id}/fetch/`)
+		.get(`/channel/${channel1.id}/messages/`)
 		.send({
 			token: users.admin.token
 		})
@@ -323,64 +403,104 @@ describe('Fetch messages from channels', () => {
 			try {
 				res.body.should.match([ 
 					{
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: `"Don't ever, for any reason, do anything, to anyone, for any reason, ever, no matter what, no matter where, or who, or who you are with, or where you are going, or where you've been, ever, for any reason whatsoever. - Michael Scott"`,
 						createdAt: messages[9].createdAt,
 						id: messages[9].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "J'ai edite ce message huehuehue",
 						edited: true,
 						createdAt: messages[8].createdAt,
 						id: messages[8].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: 'Bah je sais pas non plus',
 						createdAt: messages[7].createdAt,
 						id: messages[7].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Mais je sais pas quoi ecrire',
 						createdAt: messages[6].createdAt,
 						id: messages[6].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "Okay, j'ai besoins d'écrire d'autres trucs",
 						createdAt: messages[5].createdAt,
 						id: messages[5].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: "Haha, j'ai vus avant que tu delete",
 						createdAt: messages[4].createdAt,
 						id: messages[4].id
 					},
 					{
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Et puis celui là vas être delete d\'ailleurs',
 						removed: true,
 						createdAt: messages[3].createdAt,
 						id: messages[3].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "C'est des messages de test",
 						createdAt: messages[2].createdAt,
 						id: messages[2].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: 'Salut',
 						createdAt: messages[1].createdAt,
 						id: messages[1].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Bonjour',
 						createdAt: messages[0].createdAt,
@@ -401,7 +521,7 @@ describe('Fetch messages from channels', () => {
 	
 	it('Fetch the last 5 messages from channel1 as user2 (member, non admin)', (done) => {
 		supertest(app)
-		.get(`/channel/${channel1.id}/fetch/5`)
+		.get(`/channel/${channel1.id}/messages/5`)
 		.send({
 			token: users.user2.token
 		})
@@ -412,32 +532,52 @@ describe('Fetch messages from channels', () => {
 			try {
 				res.body.should.match([ 
 					{
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: `"Don't ever, for any reason, do anything, to anyone, for any reason, ever, no matter what, no matter where, or who, or who you are with, or where you are going, or where you've been, ever, for any reason whatsoever. - Michael Scott"`,
 						createdAt: messages[9].createdAt,
 						id: messages[9].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "J'ai edite ce message huehuehue",
 						edited: true,
 						createdAt: messages[8].createdAt,
 						id: messages[8].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: 'Bah je sais pas non plus',
 						createdAt: messages[7].createdAt,
 						id: messages[7].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: 'Mais je sais pas quoi ecrire',
 						createdAt: messages[6].createdAt,
 						id: messages[6].id
 					}, {
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "Okay, j'ai besoins d'écrire d'autres trucs",
 						createdAt: messages[5].createdAt,
@@ -458,7 +598,7 @@ describe('Fetch messages from channels', () => {
 	
 	it('Fetch the last 2 messages from channel1 as user2 (member, non admin), starting from 5 messages ago', (done) => {
 		supertest(app)
-		.get(`/channel/${channel1.id}/fetch/2/${messages[5].id}`)
+		.get(`/channel/${channel1.id}/messages/2/${messages[5].id}`)
 		.send({
 			token: users.user2.token
 		})
@@ -468,13 +608,21 @@ describe('Fetch messages from channels', () => {
 			try {
 				res.body.should.match([ 
 					{
-						author: users.user1.id,
+						author: {
+							username : users.user1.username,
+							id : users.user1.id,
+							scope : users.user1.scope
+						},
 						channelID: channel1.id,
 						content: "Okay, j'ai besoins d'écrire d'autres trucs",
 						createdAt: messages[5].createdAt,
 						id: messages[5].id
 					}, {
-						author: users.user2.id,
+						author: {
+							username : users.user2.username,
+							id : users.user2.id,
+							scope : users.user2.scope
+						},
 						channelID: channel1.id,
 						content: "Haha, j'ai vus avant que tu delete",
 						createdAt: messages[4].createdAt,
