@@ -94,6 +94,40 @@ module.exports = {
 			}
 		})
 	},
+	postFile : (token, route, data) => {
+		return new Promise((resolve, reject) => {
+			try {
+				const requestOptions = {
+					method: 'POST',
+					headers: { 
+						'Authorization': `Bearer ${token}`
+					},
+					body: data
+				};
+				fetch(`${websiteURL}/${route}`, requestOptions)
+				.then(response => {
+					response.json()
+					.then(data => {
+						if(response.status >= 200 && response.status < 300)
+							resolve({
+								status : response.status,
+								content : data
+							})
+						else 
+							reject({
+								status : response.status,
+								error : data
+							})
+					})
+				})
+			} catch (e) {
+				reject({
+					status : -1,
+					error : e
+				})
+			}
+		})
+	},
 	
 	put : (token, route, body) => {
 		return new Promise((resolve, reject) => {

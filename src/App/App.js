@@ -17,6 +17,7 @@ export default class App extends React.Component {
 		super(props);
 		
 		this.disconnect = () => {
+			localStorage.removeItem('token');
 			this.setState ({
 				logged : false
 			})
@@ -30,9 +31,12 @@ export default class App extends React.Component {
 		
 		this.state = {
 			logged: false,
+			token : '',
 			disconnect : this.disconnect,
-			setLoggedUser : this.setLoggedUser
+			setLoggedUser : this.setLoggedUser,
+			sortChannels : this.sortChannels
 		}
+		this.fetchUserWithToken()
 		
 		this.connect = this.connect.bind(this)
 		this.fetchChannels = this.fetchChannels.bind(this)
@@ -46,6 +50,7 @@ export default class App extends React.Component {
 				password : passwd
 			})
 			.then(data => {
+				localStorage.setItem('token', data.content.token)
 				this.setState({
 					token : data.content.token,
 					loggedUser : data.content,
@@ -63,6 +68,31 @@ export default class App extends React.Component {
 			})
 		})
 	}
+	
+	fetchUserWithToken = () => {
+		let token = localStorage.getItem('token')
+		console.log(token)
+		if(token) {
+			fetchLib.get(token, "user")
+			.then(data => {
+				this.setState({
+					token : token
+				} , () => {
+					this.setState({
+						loggedUser : data.content,
+					}, 
+						this.fetchChannels()
+					)
+				})
+			})
+			// 
+			.catch(e => {
+				alert("Erreur")
+				console.log(e)
+			})
+		}
+	}
+	
 	
 	register = (usrname, mail, passwd) => {
 		return new Promise((resolve, reject) => {
@@ -107,16 +137,35 @@ export default class App extends React.Component {
 		try {
 			fetchLib.get(this.state.token, `channels/`)
 			.then(data => {
-				console.log(data)
 				this.setState({
 					channels : data.content,
 					logged : true
+				}, () => {
+					this.sortChannels()
 				})
 			})
 		} catch (e) {
 			console.log("EREUR CATCH")
 			console.log(e)
 		}
+	}
+	
+	
+	sortChannels = () => {
+		let newChannels = this.state.channels.sort((O1, O2) => {
+			let dateO1 = O1.createdAt;
+			if(O1.messages && O1.messages.last && O1.messages.last && O1.messages.last.createdAt)
+				dateO1 = O1.messages.last.createdAt
+			
+			let dateO2 = O2.createdAt;
+			if(O2.messages && O2.messages.last && O2.messages.last && O2.messages.last.createdAt)
+				dateO2 = O2.messages.last.createdAt
+			
+			return -(dateO1 - dateO2)
+		})
+		this.setState({
+			channels : newChannels
+		})
 	}
 	
 	render() {

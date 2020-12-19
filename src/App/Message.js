@@ -112,6 +112,7 @@ export default class Message extends React.Component {
 		})
 	}
 	
+	
 	render() {
 		
 		let stringDeletedEdited = ''
@@ -150,7 +151,7 @@ export default class Message extends React.Component {
 				onMouseLeave = {() => this.setMouseOver(0)}
 			>
 				<ListItemAvatar>
-					<Avatar alt={this.state.message.author.username + ' username'} src={`${fetchLib.url}/user/${this.state.message.author.id}/avatar`} />
+					<Avatar alt={this.state.message.author.username + ' username'} src={`${fetchLib.url}/user/${this.state.message.author.id}/avatar#${Math.floor(Math.random() * 1000000)}`} />
 				</ListItemAvatar>
 				<ListItemText
 					

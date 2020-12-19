@@ -1,5 +1,4 @@
 import React, {useRef, useState, useContext} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import Slide from '@material-ui/core/Slide';
 import Button from '@material-ui/core/Button';
@@ -25,6 +24,7 @@ import {
 } from "@material-ui/pickers";
 
 
+import FileUpload from './FileUpload.js';
 import AppContext from './appContext.js';
 let fetchLib = require('./fetch.js');
 
@@ -38,9 +38,8 @@ export default function DialogRegister(props) {
 	
 	const textFieldUsername = useRef()
 	const textFieldPassword = useRef()
-	const textFieldPasswordCheck = useRef()
-	const [usernameAvailable, setUsernameAvailable] = useState(true)
 	const [passwordStatus, setPasswordStatus] = useState(false)
+	const [avatarLink, setAvatarLink] = useState(fetchLib.url + '/img/Avatar' + context.loggedUser.id)
 	const [selectedDate, setSelectedDate] = React.useState(
 		context.loggedUser.bday? (
 			new Date(context.loggedUser.bday)
@@ -91,8 +90,7 @@ export default function DialogRegister(props) {
 				break
 			case 'Custom':
 				userData.avatar = {
-					type : 'custom',
-					link : 'test.com'
+					type : 'Custom',
 				}
 				break
 			default : 
@@ -126,7 +124,7 @@ export default function DialogRegister(props) {
 	if(context.loggedUser.avatar && context.loggedUser.avatar.type)
 		switch (context.loggedUser.avatar.type) {
 			case "Default" : 
-				avatarValue = context.loggedUser.avatar.nb
+				avatarValue = context.loggedUser.avatar.nb + ''
 				break
 			case "Gravatar" :
 				avatarValue = "Gravatar"
@@ -137,6 +135,7 @@ export default function DialogRegister(props) {
 			default :
 				avatarValue = null
 		}
+	
 	return (
 		<div>
 			<Dialog 
@@ -165,7 +164,6 @@ export default function DialogRegister(props) {
 							autoFocus
 							variant = "outlined"
 							label = "Username"
-							defaultValue = {context.loggedUser.username}
 							value = {context.loggedUser.username}
 						/>
 						<TextField
@@ -261,7 +259,7 @@ export default function DialogRegister(props) {
 										<Tooltip title='Custom' placement='top'>
 											<Avatar 
 												alt='Custom Avatar' 
-												src= {fetchLib.url + '/img/user_' + context.loggedUser.id}
+												src= {avatarLink}
 											>
 												<AddPhotoAlternateIcon/>
 											</Avatar>
@@ -271,6 +269,15 @@ export default function DialogRegister(props) {
 								/>
 							</RadioGroup>
 						</Box>
+						
+						<FileUpload
+							setAvatar = {(link) => setAvatarLink(link)}
+						/>
+						
+						
+						
+						
+						
 						<MuiPickersUtilsProvider utils={DateFnsUtils}>
 							<KeyboardDatePicker
 								fullWidth

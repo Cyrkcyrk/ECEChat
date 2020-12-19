@@ -17,6 +17,9 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
+
+import fetchLib from './fetch.js';
+
 export default function DialogAddUser(props) {
 	const [open, setOpen] = useState(false);
 	const [errorText, setErrorText] = useState(false);
@@ -98,7 +101,7 @@ export default function DialogAddUser(props) {
 						<List>
 							<ListItem>
 								<ListItemAvatar>
-									<Avatar alt={user.username + ' username'} src={user.avatar} />
+									<Avatar alt={user.username + ' username'} src={`${fetchLib.url}/user/${user.id}/avatar#${Math.floor(Math.random() * 1000000)}`} />
 								</ListItemAvatar>
 								<ListItemText primary={user.username} />
 							</ListItem>

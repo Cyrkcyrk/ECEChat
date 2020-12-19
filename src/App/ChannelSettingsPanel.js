@@ -18,6 +18,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import fetchLib from './fetch.js';
 import DialogAddUser from './DialogAddUser.js';
 import MoreSettings from './MoreSettings.js';
 import AppContext from './appContext.js';
@@ -26,7 +27,7 @@ function UserTile (props) {
 	return (
 		<ListItem key={props.user.id}>
 			<ListItemAvatar>
-				<Avatar alt={props.user.username + ' username'} src={props.user.avatar} />
+				<Avatar alt={props.user.username + ' username'} src={`${fetchLib.url}/user/${props.user.id}/avatar#${Math.floor(Math.random() * 1000000)}`} />
 			</ListItemAvatar>
 			<ListItemText primary={props.user.username} />
 			{ props.buttons ? (
@@ -114,7 +115,7 @@ export default function ChannelSettingsPanel(props) {
 										) : null,
 										{
 											text : "Copy ID",
-											fct : () => navigator.clipboard.writeText(this.state.message.id)
+											fct : () => navigator.clipboard.writeText(userID)
 										}, 
 									]}
 								/>
