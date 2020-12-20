@@ -1,4 +1,8 @@
-*/.git/
-node_modules/
-package-lock.json
-local.js
+.*
+*lock*
+/db
+/node_modules
+!.gitignore
+/courses
+/db
+/public/img
