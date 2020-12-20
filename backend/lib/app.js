@@ -3,6 +3,7 @@ const db = require('./db')
 const express = require('express')
 var cors = require('cors')
 var path = require('path')
+const middleware = require('./middleware')
 
 const app = express()
 
@@ -25,7 +26,7 @@ require("./app_users.js")(app)
 require("./app_login.js")(app)
 
 
-app.get('/clear', async (req, res) => {
+app.get('/clear', middleware.admin, async (req, res) => {
 	db.admin.clear()
 	.then ( _ => {
 		res.json({"status": "success"})
@@ -36,7 +37,7 @@ app.get('/clear', async (req, res) => {
 	})
 })
 
-.get('/populate', (req, res) => {
+.get('/populate', middleware.admin, (req, res) => {
 	db.admin.populate()
 	.then ( data => {
 		res.json(data)

@@ -1,70 +1,79 @@
-import React from 'react';
-import { Button } from '@material-ui/core';
-// import { makeStyles } from '@material-ui/core/styles';
+import React, {useState} from 'react';
+import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Link from '@material-ui/core/Link';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
 
-// import { Input } from '@material-ui/core';
+import DialogRegister from './DialogRegister.js';
 
+const useStyles = makeStyles((theme) => ({
+	paper: {
+		marginTop: theme.spacing(15),
+		display: 'flex',
+		flexDirection: 'column',
+		alignItems: 'center',
+	},
+	submit: {
+		margin: theme.spacing(3, 0, 2),
+	},
+}));
 
-export default class Login extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			login: props.login,
-			usernameProperties : {
-				variant : "outlined",
-				error : false,
-				type : "text",
-				helperText : false,
-				label : "Username",
-			},
-			passwordProperties : {
-				variant : "outlined",
-				error : false,
-				type : "password",
-				helperText : false,
-				label : "Password",
-			},
-			
-		};
-		this.handleSubmit = this.handleSubmit.bind(this)
-		this.handleUsernameChange = this.handleUsernameChange.bind(this)
-		this.handlePasswordChange = this.handlePasswordChange.bind(this)
-	}
+export default function Login(props) {
+	const classes = useStyles();
+	const [register, setRegisterOpen] = React.useState(false);
+	// const [showPassword, setShowPassword] = useState(false);
+	const [showPassword] = useState(false);
 	
-	handleSubmit (e) {
-		this.state.login(
-			this.state.username,
-			this.state.password
+	const [state, setState] = useState({
+		usernameProperties : {
+			variant : "outlined",
+			error : false,
+			helperText : false,
+			label : "Username",
+		},
+		passwordProperties : {
+			variant : "outlined",
+			error : false,
+			helperText : false,
+			label : "Password",
+		}
+	})
+	
+	const handleSubmit = (ev) => {
+		ev.preventDefault(); 
+		const data = new FormData(ev.target)
+		
+		props.login(
+			data.get("username"),
+			data.get("password")
 		)
 		.catch(e => {
-			console.log("ERREUR: ")
 			switch(e.name) {
 				case "unknownUser": {
-					this.setState({
+					setState({
 						usernameProperties : {
 							variant : "outlined",
 							error : true,
-							type : "text",
 							helperText : "Unknonw username",
 							label : "Username",
-						}
+						},
+						passwordProperties : state.passwordProperties
 					})
 					break
 				}
 				case "badPassword" : {
-					this.setState({
+					setState({
 						usernameProperties : {
 							variant : "outlined",
 							error : false,
-							type : "text",
 							helperText : false,
 							label : "Username",
 						},
 						passwordProperties : {
 							variant : "outlined",
 							error : true,
-							type : "password",
 							helperText : "Wrong password",
 							label : "Password",
 						}
@@ -76,46 +85,70 @@ export default class Login extends React.Component {
 				}
 			}
 		})
+		
 	}
-	
-	handleUsernameChange (e) {
-		this.setState({username : e.target.value})
-	}
-	
-	handlePasswordChange (e) {
-		this.setState({password : e.target.value})
-	}
-	
-	
-	render() {
-		return (
 
-			<form>
+	return (
+		<div className={classes.paper}>
+			<DialogRegister
+				open = {register}
+				setOpen = {(status) => setRegisterOpen(status)}
+				checkUsername = {props.checkUsername}
+				register = {props.register}
+			/>
+			<Typography variant="h3">
+				ECEChat
+			</Typography>
+			<form onSubmit={handleSubmit}>
 				<TextField
-					type = {this.state.usernameProperties.type}
-					variant = {this.state.usernameProperties.variant}
-					label = {this.state.usernameProperties.label}
-					helperText = {this.state.usernameProperties.helperText}
-					error = {this.state.usernameProperties.error}
-					onChange = {this.handleUsernameChange}
+					margin="normal"
+					required
+					fullWidth
+					name="username"
+					autoFocus
+					variant = {state.usernameProperties.variant}
+					error = {state.usernameProperties.error}
+					helperText = {state.usernameProperties.helperText}
+					label = {state.usernameProperties.label}
 				/>
 				<TextField
-					type = {this.state.passwordProperties.type}
-					variant = {this.state.passwordProperties.variant}
-					label = {this.state.passwordProperties.label}
-					helperText = {this.state.passwordProperties.helperText}
-					error = {this.state.passwordProperties.error}
-					onChange = {this.handlePasswordChange}
+					margin="normal"
+					required
+					fullWidth
+					name="password"
+					variant = {state.passwordProperties.variant}
+					error = {state.passwordProperties.error}
+					type = {showPassword ? 'text' : 'password'}
+					helperText = {state.passwordProperties.helperText}
+					label = {state.passwordProperties.label}
 				/>
-				<Button 
+				
+				
+				
+				<Button
+					type="submit"
+					fullWidth
 					variant="outlined"
-					onClick={this.handleSubmit}
-					// type="submit"	
+					color="primary"
+					className={classes.submit}
 				>
-					Login
+					Sign In
 				</Button>
-					
+				<Box display="flex" width="100%" >
+					<Box flexGrow={1} >
+						<Link href='#' variant="body2">
+							{
+								//'Forgot password?'
+							}
+						</Link>
+					</Box>
+					<Box>
+						<Link href='#' variant="body2" onClick = {() => {setRegisterOpen(true)}}>
+							Don't have an account? Sign Up
+						</Link>
+					</Box>
+				</Box>
 			</form>
-		)
-	}
+		</div>
+	);
 }

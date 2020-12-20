@@ -96,7 +96,7 @@ class MainClass extends React.Component {
 		fetchLib.get(this.context.token, `channel/${this.state.channels[i].id}/messages/`)
 		.then(data => {
 			let tmpSelectedChannel = {...this.state.channels[i]}
-			tmpSelectedChannel.messagesData = data.content
+			tmpSelectedChannel.messagesData = data.content.reverse()
 			tmpSelectedChannel.fcts = {
 				user : {
 					add : (_userID) => this.addUser(_userID),
@@ -107,6 +107,10 @@ class MainClass extends React.Component {
 				admin : {
 					add : (_userID) => this.addAdmin(_userID),
 					remove : (_userID) => this.removeAdmin(_userID)
+				},
+				messages : {
+					edit : (_msgID, _content) => this.editMessage(_msgID, _content),
+					remove : (_msgID) => this.deleteMessage(_msgID)
 				}
 			}
 			
@@ -150,6 +154,8 @@ class MainClass extends React.Component {
 			console.log(data);
 			let tmpSelectedChannel = {...this.state.selectedChannel}
 			tmpSelectedChannel.messagesData.unshift(data.content)
+			tmpSelectedChannel.messages.list.unshift(data.content)
+			tmpSelectedChannel.messages.last = data.content
 			this.setState({
 				selectedChannel : tmpSelectedChannel
 			})
@@ -163,6 +169,89 @@ class MainClass extends React.Component {
 			}
 		})
 	}
+	
+	editMessage = (msgID, content) => {
+		return new Promise ((resolve, reject) => {
+			let messageNB = this.state.selectedChannel.messagesData.findIndex((msg) => {
+				if(msg.id === msgID)
+					return true
+				else
+					return false
+			})
+			
+			if(messageNB > -1) {
+				fetchLib.put(this.context.token, `message/${msgID}`, {content : content})
+				.then(data => {
+					let tmpSelectedChannel = {...this.state.selectedChannel}
+					tmpSelectedChannel.messagesData[messageNB].content = data.content.content
+					tmpSelectedChannel.messagesData[messageNB].edited = true
+					
+					if(tmpSelectedChannel.messages.last.id === data.content.id)
+						tmpSelectedChannel.messages.last = data.content
+					
+					this.setState({
+						selectedChannel : tmpSelectedChannel
+					})
+					resolve(data.content)
+				})
+				.catch(e => {
+					if(e.status > 0 && e.error.name && (e.error.name === 'TokenExpiredError' || e.error.name === 'JsonWebTokenError')) {
+						this.context.disconnect()
+					}
+					else {
+						alert('Error')
+						console.error(e)
+						reject(e)
+					}
+				})
+			}
+			else {
+				alert('Couldn\'t find the message')
+			}
+		})
+	}
+	
+	deleteMessage = (msgID) => {
+		return new Promise ((resolve, reject) => {
+			let messageNB = this.state.selectedChannel.messagesData.findIndex((msg) => {
+				if(msg.id === msgID)
+					return true
+				else
+					return false
+			})
+			
+			if(messageNB > -1) {
+				fetchLib.delete(this.context.token, `message/${msgID}`)
+				.then(data => {
+					let tmpSelectedChannel = {...this.state.selectedChannel}
+					tmpSelectedChannel.messagesData[messageNB].content = data.content.content
+					tmpSelectedChannel.messagesData[messageNB].removed = true
+					
+					if(tmpSelectedChannel.messages.last.id === data.content.id)
+						tmpSelectedChannel.messages.last = data.content
+					
+					this.setState({
+						selectedChannel : tmpSelectedChannel
+					})
+					resolve(data.content)
+				})
+				.catch(e => {
+					if(e.status > 0 && e.error.name && (e.error.name === 'TokenExpiredError' || e.error.name === 'JsonWebTokenError')) {
+						this.context.disconnect()
+					}
+					else {
+						alert('Error')
+						console.error(e)
+						reject(e)
+					}
+				})
+			}
+			else {
+				alert('Couldn\'t find the message')
+			}
+		})
+	}
+	
 	
 	addChannel(name) {
 		fetchLib.post(this.context.token, "channel/", {

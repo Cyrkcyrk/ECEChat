@@ -72,7 +72,7 @@ export default function ChannelSettingsPanel(props) {
 				<AccordionDetails>
 					<List>
 					{props.channel.admins.map((userID, index) => (
-						<UserTile
+						<UserTile key={userID}
 							user = {props.channel.usersData[userID]}
 							buttons = { isLoggedAdmin ? (
 									[
@@ -98,7 +98,7 @@ export default function ChannelSettingsPanel(props) {
 					<List>
 						{props.channel.members.map((userID, index) => (
 							props.channel.usersData[userID] ? (
-								<UserTile
+								<UserTile key={userID}
 									user = {props.channel.usersData[userID]}
 									buttons = {[
 										isLoggedAdmin ? (
@@ -135,21 +135,21 @@ export default function ChannelSettingsPanel(props) {
 					</List>
 				</AccordionDetails>
 			</Accordion>
-			
-			
 			<Divider />
-			<Divider />
-			<List>
-				<ListItem 
-					button
-					onClick = {() => props.channel.fcts.user.remove(context.loggedUser.id)}
-				>
-					<ListItemIcon style={{ color: "red" }}>
-						<ExitToAppIcon />
-					</ListItemIcon>
-					<ListItemText style={{ color: "red" }} primary={"Leave the channel"} />
-				</ListItem>
-			</List>
+			
+			{!(context.loggedUser && context.loggedUser.scope.admin) ? (
+				<List>
+					<ListItem 
+						button
+						onClick = {() => props.channel.fcts.user.remove(context.loggedUser.id)}
+					>
+						<ListItemIcon style={{ color: "red" }}>
+							<ExitToAppIcon />
+						</ListItemIcon>
+						<ListItemText style={{ color: "red" }} primary={"Leave the channel"} />
+					</ListItem>
+				</List>
+			) : null}
 		</Drawer>
 	)
 }
