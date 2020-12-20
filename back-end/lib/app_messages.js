@@ -36,6 +36,17 @@ module.exports = (app) => {
 				if(req.userData.scope.admin || channel.members.includes(req.userData.id)) {
 					db.messages.create(req.body, req.userData.id, channel.id)
 					.then( channel => {
+						
+						if(app.io) {
+							try {
+								app.io.sockets.emit('newMessage', { channelID : channelID, messageID : message.id})
+							}catch (e) {
+								console.error("Error socket")
+								console.error(e)
+							}
+							
+						}
+						
 						res.status(201).json(channel);
 					})
 					.catch (e => {

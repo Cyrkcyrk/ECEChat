@@ -5,7 +5,10 @@ var cors = require('cors')
 var path = require('path')
 const middleware = require('./middleware')
 
-const app = express()
+let app = express()
+app.setSocket = (socket) => {
+	app.io = socket
+}
 
 app.use(cors())
 app.use(require('body-parser').json())
