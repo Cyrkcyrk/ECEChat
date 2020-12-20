@@ -88,11 +88,11 @@ Nous pensons avoir répondu a l'entièretée du cahier des charges. Cependant, s
 
 ## Author informations
 
-Cyrille KASYC   
-cyrille.kasyc@###.ece.fr
-ckasyc@#######.42.fr
+Cyrille KASYC
+cyrille.kasyc@###.ece.fr<br>
+ckasyc@#######.42.fr<br>
 Student at [ECE Paris.Lyon](https://www.ece.fr/) and [42 Paris](http://42.fr/)
 
-Fanny Marcuccini
-fanny.marcuccini@###.ece.fr
+Fanny MARCUCCINI<br>
+fanny.marcuccini@###.ece.fr<br>
 Student at [ECE Paris.Lyon](https://www.ece.fr/) 
