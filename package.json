@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.21.0",
     "date-fns": "^2.16.1",
+    "emoji-picker-react": "^3.2.4",
     "fetch": "^1.1.0",
     "md5": "^2.3.0",
     "react": "^16.13.1",

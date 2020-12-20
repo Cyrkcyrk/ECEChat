@@ -2,7 +2,7 @@ import React from 'react';
 import Box from '@material-ui/core/Box';
 
 import Messages from './Messages.js'
-import MessageForm from './MessageForm.js';
+import MessageFormEmoji from './MessageFormEmoji.js';
 
 
 export default function Channel (props) {
@@ -19,7 +19,7 @@ export default function Channel (props) {
 			<Box 
 				width="100%"
 			>
-				<MessageForm 
+				<MessageFormEmoji 
 					addMessage = {props.addMessage}
 				/>
 			</Box>
