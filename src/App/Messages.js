@@ -20,8 +20,8 @@ export default class Messages extends React.Component {
 		return (
 			<div>
 				<List>
-					{ this.props.messages.slice(0).reverse().map( (_message, i) => (
-						<Message 
+					{ this.props.messages.map( (_message, i) => (
+						<Message key={_message.id}
 							message = {_message}
 							channel = {this.props.channel}
 						/>

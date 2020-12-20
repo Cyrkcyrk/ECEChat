@@ -27,16 +27,25 @@ export default class Message extends React.Component {
 	}
 	
 	deleteMessage = () => {
+		this.state.channel.fcts.messages.remove(this.state.message.id)
+		.catch(e => {
+			if(e.status > 0 && e.error.name && (e.error.name === 'TokenExpiredError' || e.error.name === 'JsonWebTokenError')) {
+				this.context.disconnect()
+			}
+			else {
+				alert('Error')
+				console.error(e)
+			}
+		})
+		
+		
+		/*
 		console.log(this.context)
 		fetchLib.delete(this.context.token, `message/${this.state.message.id}`)
 		.then(data => {
 			let tmpMsg = {...this.state.message}
 			tmpMsg.content = data.content.content
 			tmpMsg.removed = true
-			console.log("tmpMsg")
-			console.log(tmpMsg)
-			console.log("RECIEVED ANSWER")
-			console.log(data.content)
 			this.setState({
 				message : tmpMsg
 			})
@@ -50,16 +59,27 @@ export default class Message extends React.Component {
 				console.error(e)
 			}
 		})
-	}
-	
-	showEditDialog = () => {
-		console.log("ON EDIIIIT")
+		*/
 	}
 	
 	editMessage = (msg) => {
 		console.log(msg.content)
-		this.setEditStatus(false)
-		fetchLib.put(this.context.token, `message/${this.state.message.id}`, {content : msg.content})
+		this.state.channel.fcts.messages.edit(this.state.message.id, msg.content).then(msg => {
+			this.setEditStatus(false)
+		})
+		.catch(e => {
+			if(e.status > 0 && e.error.name && (e.error.name === 'TokenExpiredError' || e.error.name === 'JsonWebTokenError')) {
+				this.context.disconnect()
+			}
+			else {
+				alert('Error')
+				console.error(e)
+			}
+		})
+		
+		
+		
+		/*fetchLib.put(this.context.token, `message/${this.state.message.id}`, {content : msg.content})
 		.then(data => {
 			let tmpMsg = {...this.state.message}
 			tmpMsg.content = data.content.content
@@ -77,6 +97,7 @@ export default class Message extends React.Component {
 				console.error(e)
 			}
 		})
+		*/
 	}
 	
 	dateToString = (timestamp) => {

@@ -3,7 +3,7 @@ import Box from '@material-ui/core/Box';
 
 import './App.css';
 import Main from './Main.js';
-import Login from './Login2.js';
+import Login from './Login.js';
 
 import appContext from './appContext.js';
 
@@ -87,8 +87,13 @@ export default class App extends React.Component {
 			})
 			// 
 			.catch(e => {
-				alert("Erreur")
-				console.log(e)
+				if(e.status > 0 && e.error.name && (e.error.name === 'TokenExpiredError' || e.error.name === 'JsonWebTokenError')) {
+					this.disconnect()
+				}
+				else {
+					alert("Erreur")
+					console.log(e)
+				}
 			})
 		}
 	}
