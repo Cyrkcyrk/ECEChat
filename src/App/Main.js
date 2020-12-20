@@ -15,7 +15,11 @@ import Channel from './Channel.js';
 import MoreSettings from './MoreSettings.js';
 import DialogUserSettings from './DialogUserSettings.js';
 
+import openSocket from 'socket.io-client';
 const fetchLib = require('./fetch.js')
+
+
+// const socket = openSocket(fetchLib.url, , {transports: ['websocket']});
 
 const drawerWidth = 240;
 
@@ -89,7 +93,23 @@ class MainClass extends React.Component {
 			rightPannel : false,
 			userSettingsStatus : false
 		};
+		
 	}
+	
+	
+	componentDidMount() {
+		console.log("ON EST MONTE")
+		const socket = openSocket(fetchLib.url)
+		socket.emit('message', 'saluuut')
+		socket.on('message', data => {
+			console.log("SOCKET MESSAGE")
+			console.log(data)
+		})
+		.on('newMessage', data => {
+			console.log("SOCKET NEW MESSAGE")
+			console.log(data)
+		})
+	 }
 	
 	switchChannel = (i) => {
 		this.setPanelStatus(false)
@@ -153,7 +173,7 @@ class MainClass extends React.Component {
 			data.content.author = this.context.loggedUser
 			console.log(data);
 			let tmpSelectedChannel = {...this.state.selectedChannel}
-			tmpSelectedChannel.messagesData.unshift(data.content)
+			tmpSelectedChannel.messagesData.push(data.content)
 			tmpSelectedChannel.messages.list.unshift(data.content)
 			tmpSelectedChannel.messages.last = data.content
 			this.setState({
@@ -251,7 +271,6 @@ class MainClass extends React.Component {
 			}
 		})
 	}
-	
 	
 	addChannel(name) {
 		fetchLib.post(this.context.token, "channel/", {
