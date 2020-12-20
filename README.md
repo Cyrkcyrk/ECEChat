@@ -88,7 +88,7 @@ Nous pensons avoir répondu a l'entièretée du cahier des charges. Cependant, s
 
 ## Author informations
 
-Cyrille KASYC
+Cyrille KASYC<br>
 cyrille.kasyc@###.ece.fr<br>
 ckasyc@#######.42.fr<br>
 Student at [ECE Paris.Lyon](https://www.ece.fr/) and [42 Paris](http://42.fr/)
